@@ -97,10 +97,14 @@ export default {
                 this.register.notice = result2.notice
                 return
             }
-            this.register.isError = false
-            this.register.notice = ''
-            console.log(`start register ..., username:${this.register.username}, password:${this.register.password}`)
-            auth.register({username:this.register.username,password:this.register.password}).then(data=>{console.log(data)})
+            auth.register({username:this.register.username,password:this.register.password}).then(()=>{
+                this.register.isError = false
+                this.register.notice = ''
+                this.$router.push({path:"Notebooks"})
+            }).catch(data=>{
+                this.register.isError = true
+                this.register.notice = data.msg
+            })
         },
         onLogin(){
             let result1 = this.validUsername(this.login.username)
@@ -115,10 +119,14 @@ export default {
                 this.login.notice = result2.notice
                 return
             }
-            this.login.isError = false
-            this.login.notice = ''
-            console.log(`start login ..., username:${this.login.username}, password:${this.login.password}`)
-            auth.login({username:this.login.username,password:this.login.password}).then(data=>{console.log(data)})
+            auth.login({username:this.login.username,password:this.login.password}).then(()=>{
+                this.login.isError = false
+                this.login.notice = ''
+                this.$router.push({path:"Notebooks"})   
+            }).catch(data=>{
+                this.login.isError = true
+                this.login.notice = data.msg
+            })
         },
         validUsername(username){
             return {
