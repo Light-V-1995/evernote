@@ -33,6 +33,7 @@
 <script>
 
 import auth from "../apis/auth"
+import bus from "../helpers/bus"
 
 auth.getInfo().then(data=>{console.log(data)})
 
@@ -100,6 +101,7 @@ export default {
             auth.register({username:this.register.username,password:this.register.password}).then(()=>{
                 this.register.isError = false
                 this.register.notice = ''
+                bus.$emit("userInfo",{username:this.login.username})
                 this.$router.push({path:"Notebooks"})
             }).catch(data=>{
                 this.register.isError = true
@@ -122,6 +124,7 @@ export default {
             auth.login({username:this.login.username,password:this.login.password}).then(()=>{
                 this.login.isError = false
                 this.login.notice = ''
+                bus.$emit("userInfo",{username:this.login.username})
                 this.$router.push({path:"Notebooks"})   
             }).catch(data=>{
                 this.login.isError = true
