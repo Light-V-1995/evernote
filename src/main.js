@@ -1,10 +1,10 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
-import Button from "ant-design-vue/lib/button";
-import "ant-design-vue/dist/antd.css";
+import ElementUI from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
 
-Vue.component(Button.name, Button);
+Vue.use(ElementUI);
 
 Vue.config.productionTip = false;
 

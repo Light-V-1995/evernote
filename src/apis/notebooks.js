@@ -12,9 +12,10 @@ export default {
     return new Promise((resolve, reject) => {
       request(URL.GET)
         .then((res) => {
-          res.data = res.data.sort(
-            (notebook1, notebook2) => notebook1.createdAt < notebook2.createdAt
-          );
+          res.data = res.data.sort((notebook1, notebook2) => {
+            if (notebook1.createdAt > notebook2.createdAt) return -1;
+            else return 1;
+          });
           res.data.forEach((notebook) => {
             notebook.friendlyCreatedAt = friendlyDate(notebook.createdAt);
           });

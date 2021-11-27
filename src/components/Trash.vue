@@ -1,6 +1,6 @@
 <template>
   <div id="trash-detail">
-    <h1>{{msg}} : {{ $route.params.noteId }}</h1>
+    <h1>note : {{ $route.query.noteId }}</h1>
   </div>
 </template>
 
@@ -9,7 +9,7 @@ import Auth from "../apis/auth"
 export default {
     data(){
         return {
-            msg:"回收站详情页"
+
         }
     },
     created () {

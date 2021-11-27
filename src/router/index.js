@@ -23,11 +23,11 @@ const routes = [
     component: Notebooks,
   },
   {
-    path: "/Note/:noteId",
+    path: "/note",
     component: Note,
   },
   {
-    path: "/Trash/:noteId",
+    path: "/trash",
     component: Trash,
   },
 ];

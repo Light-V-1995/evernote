@@ -2,7 +2,6 @@
   <div id="app">
     <sidebar />
     <router-view></router-view>
-    <a-button type="primary">Button></a-button>
   </div>
 </template>
 
