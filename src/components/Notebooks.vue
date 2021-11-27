@@ -1,19 +1,38 @@
 <template>
-    <div id="Notebook-list">
-        <h1>{{msg}}</h1>
-            <ul>
-                <li><router-link to="/note/1">笔记本1</router-link></li>
-                <li><router-link to="/note/2">笔记本2</router-link></li>
-            </ul>
-    </div>
+  <div class="detail" id="notebook-list">
+    <header>
+      <a href="#" class="btn" @click.prevent="onCreate"><i class="iconfont icon-plus"></i> 新建笔记本</a>
+    </header>
+    <main>
+      <div class="layout">
+        <h3>笔记本列表({{notebooks.length}})</h3>
+        <div class="book-list">
+          <router-link v-for="notebook in notebooks" :key="notebook.id" to="/note/1" class="notebook">
+            <div>
+              <span class="iconfont icon-notebook"></span> {{notebook.title}} <span>{{notebook.noteCounts}}</span>
+              <span class="action" @click.stop.prevent="onEdit(notebook)">编辑</span>  
+              <span class="action" @click.stop.prevent="onDelete(notebook)">删除</span>  
+              <span class="date">{{notebook.friendlyCreatedAt}}</span>              
+            </div>
+          </router-link>          
+        </div>       
+      </div>
+
+    </main>
+
+  </div>
 </template>
 
 <script>
 import Auth from "../apis/auth"
+import Notebooks from "../apis/notebooks"
+import {friendlyDate} from "../helpers/utill"
+
+
 export default {
     data(){
         return {
-            msg:"笔记本列表"
+          notebooks:[]
         }
     },
     created () {
@@ -22,11 +41,50 @@ export default {
                 this.$router.push({"path":"login"})
             }
         })
+        Notebooks.getAll().then(res => {this.notebooks=res.data})
+    },
+    methods:{
+      onCreate(){
+        let title = window.prompt("创建笔记本")
+        if(title.trim() === ''){
+          alert("笔记本名不能为空")
+          return
+        }
+        Notebooks.addNotebook({title}).then((res)=>{
+            res.data.friendlyCreatedAt = friendlyDate(res.data.createdAt)
+            this.notebooks.unshift(res.data)
+            alert(res.msg)
+          }
+        )
+      },
+      onEdit(notebook){
+        let title = window.prompt("修改标题",notebook.title)
+        if(title.trim() === ''){
+          alert("笔记本名不能为空")
+          return
+        }
+        Notebooks.updateNotebook(notebook.id,{title}).then(res=>{
+          notebook.title = title
+          alert(res.msg)
+        })
+      },
+      onDelete(notebook){
+        let isDeleted = window.confirm("确认是否删除")
+        if(isDeleted){
+          Notebooks.deleteNotebook(notebook.id).then(res=>{
+            this.notebooks.splice(this.notebooks.indexOf(notebook),1)
+            alert(res.msg)
+            }
+          )
+        }
+      }
     }
 }
 </script>
-<style scoped>
-h1{
-    color:red;
-}
+
+
+<style lang="less" scoped>
+
+    @import url(../assets/css/Notebooks.less);
+
 </style>

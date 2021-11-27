@@ -2,13 +2,13 @@
   <div id="app">
     <sidebar />
     <router-view></router-view>
+    <a-button type="primary">Button></a-button>
   </div>
 </template>
 
 <script>
 import sidebar from "./components/SideBar.vue"
 export default {
-  name:"app",
   components:{
     sidebar
   }

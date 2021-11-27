@@ -15,7 +15,7 @@ export default {
     created () {
         Auth.getInfo().then(res=>{
             if(!res.isLogin){
-                this.$router.replace({"path":"login"})
+                this.$router.replace({name:"login"})
             }
         })
     }

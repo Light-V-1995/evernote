@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import App from "../App.vue";
+import Home from "../components/HelloWorld";
 import Login from "../components/Login.vue";
 import Notebooks from "../components/Notebooks.vue";
 import Note from "../components/NoteDetail.vue";
@@ -11,10 +11,11 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    component: App,
+    component: Home,
   },
   {
     path: "/login",
+    name: "login",
     component: Login,
   },
   {
