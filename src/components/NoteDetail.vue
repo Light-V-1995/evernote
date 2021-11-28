@@ -62,7 +62,7 @@ export default {
         })
       },300),
       deleteNote () {
-        Notes.deleteNote({ noteID : this.curNote.id }).then(data => {
+        Notes.deleteNote({ noteId : this.curNote.id }).then(data => {
           this.$message.success(data.msg)
           this.notes.splice(this.notes.indexOf(this.curNote), 1)
           this.$router.replace({ path: '/note' })

@@ -34,7 +34,7 @@ export default {
     });
   },
   deleteNote({ noteId }) {
-    return request(URL.UPDATE.replace(":noteId", noteId), "DELETE");
+    return request(URL.DELETE.replace(":noteId", noteId), "DELETE");
   },
   addNote(
     { notebookId },

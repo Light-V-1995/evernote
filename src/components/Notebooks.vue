@@ -27,13 +27,16 @@
 import Auth from "../apis/auth"
 import Notebooks from "../apis/notebooks"
 import {friendlyDate} from "../helpers/utill"
+import {mapGetters} from 'vuex'
 
 
 export default {
     data(){
         return {
-          notebooks:[]
         }
+    },
+    computed: {
+      ...mapGetters(['notebooks'])
     },
     created () {
         Auth.getInfo().then(res=>{
@@ -41,7 +44,8 @@ export default {
                 this.$router.push({"path":"login"})
             }
         })
-        Notebooks.getAll().then(res => {this.notebooks=res.data})
+        // Notebooks.getAll().then(res => {this.notebooks=res.data})
+        this.$store.dispatch('getNotebooks')
     },
     methods:{
       onCreate() {
