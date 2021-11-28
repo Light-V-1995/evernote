@@ -19,8 +19,8 @@ export default {
               return note;
             })
             .sort((note1, note2) => {
-              if (note1 < note2) return -1;
-              else return 1;
+              if (note1 < note2) return 1;
+              else return -1;
             });
           resolve(res);
         })
@@ -40,9 +40,21 @@ export default {
     { notebookId },
     { title = "", content = "" } = { title: "", content: "" }
   ) {
-    return request(URL.ADD.replace(":notebookId", notebookId), "POST", {
-      title,
-      content,
+    return new Promise((resolve, reject) => {
+      request(URL.ADD.replace(":notebookId", notebookId), "POST", {
+        title,
+        content,
+      })
+        .then((res) => {
+          res.data.createdAtFriendly = friendlyDate(res.data.createdAt);
+          res.data.updatedAtFriendly = friendlyDate(res.data.updatedAt);
+          resolve(res);
+        })
+        .catch((err) => reject(err));
     });
+    // return request(URL.ADD.replace(":notebookId", notebookId), "POST", {
+    //   title,
+    //   content,
+    // });
   },
 };

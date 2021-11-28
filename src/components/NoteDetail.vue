@@ -8,15 +8,15 @@
           <span> 创建日期: {{curNote.createdAtFriendly}} </span>
           <span> 更新日期: {{curNote.updatedAtFriendly}} </span>
           <span>{{statusText}}</span>
-          <span class="iconfont icon-delete" ></span>
-          <span class="iconfont icon-fullscreen"></span>
+          <span class="iconfont icon-delete" @click="deleteNote"></span>
+          <span class="iconfont icon-fullscreen" @click="isShowPreview = !isShowPreview"></span>
         </div>
         <div class="note-title">
           <input type="text" v-model="curNote.title" @input="updateNote" @keydown="statusText = '正在输入...'" placeholder="输入标题">
         </div>
         <div class="editor">
-          <textarea v-show="true" v-model="curNote.content" @input="updateNote" @keydown="statusText = '正在输入...'" placeholder="输入内容, 支持 markdown 语法"></textarea>
-          <div class="preview markdown-body" v-show="false">
+          <textarea v-show="!isShowPreview" v-model="curNote.content" @input="updateNote" @keydown="statusText = '正在输入...'" placeholder="输入内容, 支持 markdown 语法"></textarea>
+          <div class="preview markdown-body" v-html="previewContent" v-show="isShowPreview">
           </div>
         </div>
       </div>
@@ -30,15 +30,26 @@ import NoteSidebar from "../components/NoteSidebar.vue"
 import Bus from "../helpers/bus"
 import _ from "lodash"
 import Notes from "../apis/notes"
+import MarkdownIt from "markdown-it"
+
+let md = new MarkdownIt()
+
+
 export default {
-  components:{
-    NoteSidebar
-  },
+    components:{
+      NoteSidebar
+    },
+    computed:{
+      previewContent () {
+        return md.render(this.curNote.content || '')
+      }
+    },
     data(){
         return {
           curNote:{},
           notes:[],
-          statusText:'未改动'
+          statusText:'未改动',
+          isShowPreview:false
         }
     },
     methods:{
@@ -49,7 +60,14 @@ export default {
         }).catch(() => {
           this.statusText = '保存出错'
         })
-      },300)
+      },300),
+      deleteNote () {
+        Notes.deleteNote({ noteID : this.curNote.id }).then(data => {
+          this.$message.success(data.msg)
+          this.notes.splice(this.notes.indexOf(this.curNote), 1)
+          this.$router.replace({ path: '/note' })
+        })
+      }
     },
     created () {
         Auth.getInfo().then(res=>{
