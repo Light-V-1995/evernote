@@ -28,6 +28,7 @@
 <script>
   import Notebooks from "../apis/notebooks"
   import Notes from "../apis/notes"
+  import Bus from "../helpers/bus"
 
 
   export default {
@@ -37,7 +38,8 @@
         this.curBook = this.notebooks.find(notebook => notebook.id == this.$route.query.notebookId)|| this.notebooks[0] || {}
         return Notes.getAll({notebookId:this.curBook.id})
       }).then(res => {this.notes = res.data
-      this.$emit('update:notes',this.notes)})
+      this.$emit('update:notes',this.notes)
+      Bus.$emit('update:notes',this.notes)})
     },
     data() {
       return {

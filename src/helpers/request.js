@@ -30,7 +30,7 @@ export default function (url, type = "GET", data = {}) {
         }
       })
       .catch(() => {
-        Message.error({ msg: "网络异常" });
+        Message.error("网络异常");
         reject({ msg: "网络异常" });
       });
   });

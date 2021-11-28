@@ -19,8 +19,8 @@ export default {
               return note;
             })
             .sort((note1, note2) => {
-              if (note1 < note2) return 1;
-              else return -1;
+              if (note1 < note2) return -1;
+              else return 1;
             });
           resolve(res);
         })
