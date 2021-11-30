@@ -2,12 +2,17 @@ import Note from "../../apis/notes";
 import { Message } from "element-ui";
 
 const state = {
-  notes: [],
-  curNote: {},
+  notes: null,
+  curNoteId: null,
 };
 
 const getters = {
   notes: (state) => state.notes || [],
+  curNote: (state) => {
+    if (!Array.isArray(state.notes)) return {};
+    if (!state.curNoteId) return state.notes[0];
+    return state.notes.find((note) => note.id == state.curNoteId) || {}; //强制类型转换
+  },
 };
 
 const mutations = {
@@ -20,7 +25,7 @@ const mutations = {
   },
 
   updateNote(state, payload) {
-    let note = state.notes.find((note) => note.id === payload.noteId || {});
+    let note = state.notes.find((note) => note.id === payload.noteId) || {};
     note.title = payload.title;
     note.content = payload.content;
   },
@@ -29,6 +34,9 @@ const mutations = {
     state.notes = state.notes.filter(
       (note) => note.id !== payload.noteId //不加大括号 默认 return
     );
+  },
+  setCurNote(state, payload) {
+    state.curNoteId = payload.curNoteId;
   },
 };
 
@@ -41,13 +49,11 @@ const actions = {
   addNote({ commit }, { notebookId, title, content }) {
     return Note.addNote({ notebookId }, { title, content }).then((res) => {
       commit("addNote", { note: res.data });
-      Message.success(res.msg);
     });
   },
   updateNote({ commit }, { noteId, title, content }) {
-    return Note.updateNote({ noteId }, { title, content }).then((res) => {
+    return Note.updateNote({ noteId }, { title, content }).then(() => {
       commit("updateNote", { noteId, title, content });
-      Message.success(res.msg);
     });
   },
   deleteNote({ commit }, { noteId }) {

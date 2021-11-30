@@ -11,7 +11,9 @@ const getters = {
   curBook: (state) => {
     if (!Array.isArray(state.notebooks)) return {};
     if (!state.curBookId) return state.notebooks[0];
-    return state.notebooks.find((notebook) => notebook.id == state.curBookId);
+    return (
+      state.notebooks.find((notebook) => notebook.id == state.curBookId) || {}
+    ); //强制类型转换
   },
 };
 
@@ -39,7 +41,7 @@ const mutations = {
   // deleteNotebook(state, payload) {
   //   state.notebooks = state.notebooks.filter(notebook => {notebook.id != payload.notebookId})  默认不 return notebooks = undefined
   // },
-  setCurBookId(state, { curBookId }) {
+  setCurBook(state, { curBookId }) {
     state.curBookId = curBookId;
   },
 };

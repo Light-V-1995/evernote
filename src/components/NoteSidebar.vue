@@ -1,6 +1,6 @@
 <template>
   <div class="note-sidebar">
-    <span class="btn add-note" @click="addNote">添加笔记</span>
+    <span class="btn add-note" @click="onAddNote">添加笔记</span>
     <el-dropdown class="notebook-title"  @command="handleCommand" placement="bottom">
       <span class="el-dropdown-link">
         {{curBook.title}} <i class="iconfont icon-down"></i>
@@ -29,21 +29,17 @@
   // import Notebooks from "../apis/notebooks"
   // import Notes from "../apis/notes"
   // import Bus from "../helpers/bus"
-  import { mapActions, mapGetters} from 'vuex'
+  import { mapActions, mapGetters, mapMutations } from 'vuex'
 
   export default {
     created(){
       this.getNotebooks().then(() => {
-        this.$store.commit('setCurBookId', { curBookId: this.$route.query.notebookId })
-        this.getNotes({ notebookId: this.curBook.id })
+        this.setCurBook({ curBookId: this.$route.query.notebookId })
+        return this.getNotes({ notebookId: this.curBook.id })
+      }).then(() => {
+        this.setCurNote({ curNoteId: this.$route.query.noteId })
+        
       })
-      // Notebooks.getAll().then(res => {
-      //   this.notebooks=res.data
-      //   this.curBook = this.notebooks.find(notebook => notebook.id == this.$route.query.notebookId)|| this.notebooks[0] || {}
-      //   return Notes.getAll({notebookId:this.curBook.id})
-      // }).then(res => {this.notes = res.data
-      // this.$emit('update:notes',this.notes)
-      // Bus.$emit('update:notes',this.notes)})
     },
     data() {
       return {}
@@ -53,18 +49,18 @@
     },
 
     methods: {
+      ...mapMutations([ 'setCurBook', 'setCurNote' ]),
       ...mapActions(['getNotebooks','getNotes','addNote']),
       handleCommand(notebookId) {
         if(notebookId === 'trash'){return this.$router.push({path : '/trash'})}
         this.$store.commit('setCurBookId', { curBookId: notebookId })
         this.getNotes({ notebookId })
       },
-      addNote() {
+      onAddNote() {
         this.addNote({ notebookId : this.curBook.id })
       }
     },
   }
-
 </script>
 
 
