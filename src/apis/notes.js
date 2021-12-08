@@ -1,5 +1,5 @@
 import request from "../helpers/request";
-import { friendlyDate } from "../helpers/utill";
+import { friendlyDate } from "../helpers/util";
 
 const URL = {
   GET: "/notes/from/:notebookId",
