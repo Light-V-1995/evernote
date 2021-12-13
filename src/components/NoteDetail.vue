@@ -1,6 +1,6 @@
 <template>
   <div id="note" class="detail">
-    <note-sidebar></note-sidebar>
+    <note-sidebar  @update:notes="val => notes = val"></note-sidebar>
     <div class="note-detail">
       <div class="note-empty" v-show="!curBook.id">请创建笔记本后</div>
       <div class="note-empty" v-show="!curNote.id">选择或创建笔记</div>
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import NoteSidebar from '@/components/NoteSidebar'
+import NoteSidebar from './NoteSidebar.vue'
 import _ from 'lodash'
 import MarkdownIt from 'markdown-it'
 import { mapGetters, mapMutations, mapActions } from 'vuex'
